@@ -3,6 +3,7 @@ import flet as ft
 class View(object):
     def __init__(self, page: ft.Page):
         # Page
+
         self.page = page
         self.page.title = "TdP 2024 - Lab 04 - SpellChecker ++"
         self.page.horizontal_alignment = 'CENTER'
@@ -12,6 +13,8 @@ class View(object):
         # UI elements
         self.__title = None
         self.__theme_switch = None
+        self._txtOut = ft.ListView(expand = True)
+
 
         # define the UI elements and populate the page
 
@@ -28,8 +31,27 @@ class View(object):
 
         # Add your stuff here
 
-        self.page.add([])
+        self._lingua = ft.Dropdown(label="Select lenguage", width = self.page.width, expand=True)
+        self._addLingua()
 
+        self._tipoRicerca = ft.Dropdown(label = "Search Modality",
+                                        options= [ft.dropdown.Option("Default"), ft.dropdown.Option("Linear"), ft.dropdown.Option("Dichotomic")],
+                                        expand=True, width= self.page.width)
+
+        self._txtTesto = ft.TextField(label = "Content",
+                                      hint_text= "Add your content here",
+                                      expand = True, width= self.page.width)
+
+        self._btnSpell = ft.ElevatedButton("Spell Check",
+                                           expand=True,
+                                           on_click=self.__controller._handleSpellCheck)
+
+        self._txtFinale = ft.ListView(auto_scroll=True)
+        row1 = ft.Row([self._lingua])
+        row2 =ft.Row([self._tipoRicerca, self._txtTesto, self._btnSpell])
+        row3 = ft.Row([self._txtFinale])
+
+        self.page.add(row1, row2, row3, self._txtOut)
         self.page.update()
 
     def update(self):
@@ -51,3 +73,8 @@ class View(object):
         #     ft.colors.GREY_900 if self.page.theme_mode == ft.ThemeMode.DARK else ft.colors.GREY_300
         # )
         self.page.update()
+
+    def _addLingua(self):
+        self._lingua.options.append((ft.dropdown.Option("english")))
+        self._lingua.options.append((ft.dropdown.Option("italian")))
+        self._lingua.options.append((ft.dropdown.Option("spanish")))
